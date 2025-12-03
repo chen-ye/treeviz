@@ -68,3 +68,10 @@ class FloweringModel(DeciduousModel):
             return self.flower
 
         return super().get_color(doy, weather_factor)
+
+class EvergreenModel(PhenologyModel):
+    def __init__(self, color=(34, 139, 34)):
+        self.color = color
+
+    def get_color(self, doy: int, weather_factor: float = 1.0) -> tuple[int, int, int]:
+        return self.color

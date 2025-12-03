@@ -9,6 +9,7 @@ import { PhenologyExtension } from './phenology-layer-extension';
 import { Texture } from '@luma.gl/core';
 import { dayOfYearSignal, showDebugSignal } from '../store';
 
+// TODO migrate to tc39 decorators, not experimental
 @customElement('foliage-map')
 export class FoliageMap extends SignalWatcher(LitElement) {
   static styles = [
@@ -139,7 +140,7 @@ export class FoliageMap extends SignalWatcher(LitElement) {
               this.updateLayers();
           };
           image.src = './api/phenology/atlas.png';
-      } 
+      }
     });
 
     this.map.addControl(this.deck);

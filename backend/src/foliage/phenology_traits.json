@@ -1,42 +1,667 @@
 {
   "ACPL": {
-    "common_name": "Norway Maple",
+    "common_name": "Norway maple",
+    "type": "Deciduous",
+    "peak_color": [
+      220,
+      20,
+      60
+    ],
     "fall_start_doy": 280,
     "fall_peak_doy": 305,
-    "fall_end_doy": 330,
-    "peak_color": [255, 165, 0],
-    "color_variance": 0.1
+    "fall_end_doy": 330
   },
   "ACRU": {
-    "common_name": "Red Maple",
-    "fall_start_doy": 265,
-    "fall_peak_doy": 290,
-    "fall_end_doy": 315,
-    "peak_color": [220, 20, 60],
-    "color_variance": 0.2
+    "common_name": "red maple",
+    "type": "Deciduous",
+    "peak_color": [
+      220,
+      20,
+      60
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
   },
   "PRCE2": {
-    "common_name": "Cherry Plum",
-    "fall_start_doy": 290,
-    "fall_peak_doy": 310,
-    "fall_end_doy": 325,
-    "peak_color": [178, 34, 34],
-    "color_variance": 0.15
+    "common_name": "cherry plum",
+    "type": "Flowering",
+    "peak_color": [
+      255,
+      165,
+      0
+    ],
+    "flower_color": [
+      255,
+      192,
+      203
+    ],
+    "flower_start": 80,
+    "flower_end": 100,
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
   },
   "LIST2": {
-    "common_name": "Sweetgum",
-    "fall_start_doy": 295,
-    "fall_peak_doy": 315,
-    "fall_end_doy": 340,
-    "peak_color": [255, 69, 0],
-    "color_variance": 0.3
+    "common_name": "sweetgum",
+    "type": "Deciduous",
+    "peak_color": [
+      255,
+      165,
+      0
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
   },
   "PRSE3": {
-    "common_name": "Japanese Flowering Cherry",
-    "fall_start_doy": 295,
-    "fall_peak_doy": 310,
-    "fall_end_doy": 325,
-    "peak_color": [255, 140, 0],
-    "color_variance": 0.1
+    "common_name": "Japanese flowering cherry",
+    "type": "Flowering",
+    "peak_color": [
+      255,
+      165,
+      0
+    ],
+    "flower_color": [
+      255,
+      192,
+      203
+    ],
+    "flower_start": 80,
+    "flower_end": 100,
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "CRLA80": {
+    "common_name": "smooth hawthorn",
+    "type": "Flowering",
+    "peak_color": [
+      255,
+      165,
+      0
+    ],
+    "flower_color": [
+      255,
+      255,
+      255
+    ],
+    "flower_start": 80,
+    "flower_end": 100,
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "PYCA80": {
+    "common_name": "Callery pear",
+    "type": "Flowering",
+    "peak_color": [
+      220,
+      20,
+      60
+    ],
+    "flower_color": [
+      255,
+      255,
+      255
+    ],
+    "flower_start": 80,
+    "flower_end": 100,
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "BEPE3": {
+    "common_name": "European white birch",
+    "type": "Deciduous",
+    "peak_color": [
+      255,
+      215,
+      0
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "ACPA2": {
+    "common_name": "Japanese maple",
+    "type": "Deciduous",
+    "peak_color": [
+      220,
+      20,
+      60
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "TICO2": {
+    "common_name": "littleleaf linden",
+    "type": "Deciduous",
+    "peak_color": [
+      255,
+      215,
+      0
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "QURU": {
+    "common_name": "northern red oak",
+    "type": "Deciduous",
+    "peak_color": [
+      139,
+      69,
+      19
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "GLTR": {
+    "common_name": "honeylocust",
+    "type": "Deciduous",
+    "peak_color": [
+      255,
+      215,
+      0
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "CABE8": {
+    "common_name": "European hornbeam",
+    "type": "Deciduous",
+    "peak_color": [
+      255,
+      215,
+      0
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "COFL2": {
+    "common_name": "flowering dogwood",
+    "type": "Flowering",
+    "peak_color": [
+      220,
+      20,
+      60
+    ],
+    "flower_color": [
+      255,
+      255,
+      255
+    ],
+    "flower_start": 80,
+    "flower_end": 100,
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "PSME": {
+    "common_name": "Douglas-fir",
+    "type": "Evergreen",
+    "peak_color": [
+      34,
+      139,
+      34
+    ]
+  },
+  "FRLA": {
+    "common_name": "Oregon ash",
+    "type": "Deciduous",
+    "peak_color": [
+      255,
+      215,
+      0
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "THPL": {
+    "common_name": "western redcedar",
+    "type": "Evergreen",
+    "peak_color": [
+      34,
+      139,
+      34
+    ]
+  },
+  "ZESE80": {
+    "common_name": "Japanese zelkova",
+    "type": "Deciduous",
+    "peak_color": [
+      255,
+      165,
+      0
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "COKO2": {
+    "common_name": "kousa dogwood",
+    "type": "Flowering",
+    "peak_color": [
+      220,
+      20,
+      60
+    ],
+    "flower_color": [
+      255,
+      255,
+      255
+    ],
+    "flower_start": 80,
+    "flower_end": 100,
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "ACPS": {
+    "common_name": "sycamore maple",
+    "type": "Deciduous",
+    "peak_color": [
+      220,
+      20,
+      60
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "CRME14": {
+    "common_name": "hybrid hawthorn",
+    "type": "Flowering",
+    "peak_color": [
+      255,
+      165,
+      0
+    ],
+    "flower_color": [
+      255,
+      255,
+      255
+    ],
+    "flower_start": 80,
+    "flower_end": 100,
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "ACGI": {
+    "common_name": "Amur maple",
+    "type": "Deciduous",
+    "peak_color": [
+      220,
+      20,
+      60
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "LITU": {
+    "common_name": "tuliptree",
+    "type": "Deciduous",
+    "peak_color": [
+      255,
+      215,
+      0
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "ACFL": {
+    "common_name": "southern sugar maple",
+    "type": "Deciduous",
+    "peak_color": [
+      220,
+      20,
+      60
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "QUPA2": {
+    "common_name": "pin oak",
+    "type": "Deciduous",
+    "peak_color": [
+      139,
+      69,
+      19
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "CRPH": {
+    "common_name": "Washington hawthorn",
+    "type": "Flowering",
+    "peak_color": [
+      255,
+      165,
+      0
+    ],
+    "flower_color": [
+      255,
+      255,
+      255
+    ],
+    "flower_start": 80,
+    "flower_end": 100,
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "CEJA2": {
+    "common_name": "katsura tree",
+    "type": "Deciduous",
+    "peak_color": [
+      255,
+      215,
+      0
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "AEHI": {
+    "common_name": "horse chestnut",
+    "type": "Flowering",
+    "peak_color": [
+      255,
+      215,
+      0
+    ],
+    "flower_color": [
+      255,
+      255,
+      255
+    ],
+    "flower_start": 80,
+    "flower_end": 100,
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "SOAU": {
+    "common_name": "European mountain ash",
+    "type": "Deciduous",
+    "peak_color": [
+      255,
+      165,
+      0
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "STJA5": {
+    "common_name": "Japanese snowbell",
+    "type": "Flowering",
+    "peak_color": [
+      255,
+      215,
+      0
+    ],
+    "flower_color": [
+      255,
+      255,
+      255
+    ],
+    "flower_start": 80,
+    "flower_end": 100,
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "ACMA3": {
+    "common_name": "bigleaf maple",
+    "type": "Deciduous",
+    "peak_color": [
+      220,
+      20,
+      60
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "PRAV": {
+    "common_name": "sweet cherry",
+    "type": "Flowering",
+    "peak_color": [
+      255,
+      165,
+      0
+    ],
+    "flower_color": [
+      255,
+      192,
+      203
+    ],
+    "flower_start": 80,
+    "flower_end": 100,
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "TIPL": {
+    "common_name": "largeleaf linden",
+    "type": "Deciduous",
+    "peak_color": [
+      255,
+      215,
+      0
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "CECA4": {
+    "common_name": "eastern redbud",
+    "type": "Flowering",
+    "peak_color": [
+      255,
+      215,
+      0
+    ],
+    "flower_color": [
+      255,
+      192,
+      203
+    ],
+    "flower_start": 80,
+    "flower_end": 100,
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "QUCO2": {
+    "common_name": "scarlet oak",
+    "type": "Deciduous",
+    "peak_color": [
+      139,
+      69,
+      19
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "FASY": {
+    "common_name": "European beech",
+    "type": "Deciduous",
+    "peak_color": [
+      139,
+      69,
+      19
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "ACGR14": {
+    "common_name": "paperbark maple",
+    "type": "Deciduous",
+    "peak_color": [
+      220,
+      20,
+      60
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "ULAM": {
+    "common_name": "American elm",
+    "type": "Deciduous",
+    "peak_color": [
+      255,
+      215,
+      0
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "MAGR4": {
+    "common_name": "southern magnolia",
+    "type": "Flowering",
+    "peak_color": [
+      139,
+      69,
+      19
+    ],
+    "flower_color": [
+      255,
+      255,
+      255
+    ],
+    "flower_start": 80,
+    "flower_end": 100,
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "ACCA5": {
+    "common_name": "hedge maple",
+    "type": "Deciduous",
+    "peak_color": [
+      220,
+      20,
+      60
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "ACCI": {
+    "common_name": "vine maple",
+    "type": "Deciduous",
+    "peak_color": [
+      220,
+      20,
+      60
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "GIBI2": {
+    "common_name": "maidenhair tree",
+    "type": "Deciduous",
+    "peak_color": [
+      255,
+      215,
+      0
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "TIAM": {
+    "common_name": "American basswood",
+    "type": "Deciduous",
+    "peak_color": [
+      255,
+      215,
+      0
+    ],
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "THOC2": {
+    "common_name": "arborvitae",
+    "type": "Evergreen",
+    "peak_color": [
+      34,
+      139,
+      34
+    ]
+  },
+  "TSHE": {
+    "common_name": "western hemlock",
+    "type": "Evergreen",
+    "peak_color": [
+      34,
+      139,
+      34
+    ]
+  },
+  "CHLA": {
+    "common_name": "Port Orford cedar",
+    "type": "Evergreen",
+    "peak_color": [
+      34,
+      139,
+      34
+    ]
+  },
+  "ROPS": {
+    "common_name": "black locust",
+    "type": "Flowering",
+    "peak_color": [
+      255,
+      215,
+      0
+    ],
+    "flower_color": [
+      255,
+      255,
+      255
+    ],
+    "flower_start": 80,
+    "flower_end": 100,
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330
+  },
+  "ILAQ80": {
+    "common_name": "English holly",
+    "type": "Evergreen",
+    "peak_color": [
+      34,
+      139,
+      34
+    ]
+  },
+  "PIAB": {
+    "common_name": "Norway spruce",
+    "type": "Evergreen",
+    "peak_color": [
+      34,
+      139,
+      34
+    ]
   }
 }

@@ -1,0 +1,352 @@
+[
+  {
+    "rank": 1,
+    "symbol": null,
+    "count": 573,
+    "scientific_name": "N/A",
+    "common_name": "N/A"
+  },
+  {
+    "rank": 2,
+    "symbol": "PRCE2",
+    "count": 134,
+    "scientific_name": "prunus cerasifera",
+    "common_name": "cherry plum"
+  },
+  {
+    "rank": 3,
+    "symbol": "ACPL",
+    "count": 114,
+    "scientific_name": "acer platanoides",
+    "common_name": "Norway maple"
+  },
+  {
+    "rank": 4,
+    "symbol": "ACRU",
+    "count": 109,
+    "scientific_name": "acer rubrum",
+    "common_name": "red maple"
+  },
+  {
+    "rank": 5,
+    "symbol": "LIST2",
+    "count": 91,
+    "scientific_name": "liquidambar styraciflua",
+    "common_name": "sweetgum"
+  },
+  {
+    "rank": 6,
+    "symbol": "CRLA80",
+    "count": 69,
+    "scientific_name": "crataegus laevigata",
+    "common_name": "smooth hawthorn"
+  },
+  {
+    "rank": 7,
+    "symbol": "PYCA80",
+    "count": 46,
+    "scientific_name": "pyrus calleryana",
+    "common_name": "Callery pear"
+  },
+  {
+    "rank": 8,
+    "symbol": "BEPE3",
+    "count": 44,
+    "scientific_name": "betula pendula",
+    "common_name": "European white birch"
+  },
+  {
+    "rank": 9,
+    "symbol": "ACPA2",
+    "count": 43,
+    "scientific_name": "acer palmatum",
+    "common_name": "Japanese maple"
+  },
+  {
+    "rank": 10,
+    "symbol": "TICO2",
+    "count": 36,
+    "scientific_name": "tilia cordata",
+    "common_name": "littleleaf linden"
+  },
+  {
+    "rank": 11,
+    "symbol": "QURU",
+    "count": 35,
+    "scientific_name": "quercus rubra",
+    "common_name": "northern red oak"
+  },
+  {
+    "rank": 12,
+    "symbol": "PRSE3",
+    "count": 32,
+    "scientific_name": "prunus serrulata",
+    "common_name": "Japanese flowering cherry"
+  },
+  {
+    "rank": 13,
+    "symbol": "GLTR",
+    "count": 32,
+    "scientific_name": "gleditsia triacanthos",
+    "common_name": "honeylocust"
+  },
+  {
+    "rank": 14,
+    "symbol": "CABE8",
+    "count": 22,
+    "scientific_name": "carpinus betulus",
+    "common_name": "European hornbeam"
+  },
+  {
+    "rank": 15,
+    "symbol": "COFL2",
+    "count": 21,
+    "scientific_name": "cornus florida",
+    "common_name": "flowering dogwood"
+  },
+  {
+    "rank": 16,
+    "symbol": "PSME",
+    "count": 20,
+    "scientific_name": "pseudotsuga menziesii",
+    "common_name": "Douglas-fir"
+  },
+  {
+    "rank": 17,
+    "symbol": "FRLA",
+    "count": 19,
+    "scientific_name": "fraxinus latifolia",
+    "common_name": "Oregon ash"
+  },
+  {
+    "rank": 18,
+    "symbol": "THPL",
+    "count": 19,
+    "scientific_name": "thuja plicata",
+    "common_name": "western redcedar"
+  },
+  {
+    "rank": 19,
+    "symbol": "ZESE80",
+    "count": 19,
+    "scientific_name": "zelkova serrata",
+    "common_name": "Japanese zelkova"
+  },
+  {
+    "rank": 20,
+    "symbol": "COKO2",
+    "count": 19,
+    "scientific_name": "cornus kousa",
+    "common_name": "kousa dogwood"
+  },
+  {
+    "rank": 21,
+    "symbol": "ACPS",
+    "count": 18,
+    "scientific_name": "acer pseudoplatanus",
+    "common_name": "sycamore maple"
+  },
+  {
+    "rank": 22,
+    "symbol": "CRME14",
+    "count": 18,
+    "scientific_name": "crataegus \u00d7media",
+    "common_name": "hybrid hawthorn"
+  },
+  {
+    "rank": 23,
+    "symbol": "ACGI",
+    "count": 18,
+    "scientific_name": "acer ginnala",
+    "common_name": "Amur maple"
+  },
+  {
+    "rank": 24,
+    "symbol": "LITU",
+    "count": 17,
+    "scientific_name": "liriodendron tulipifera",
+    "common_name": "tuliptree"
+  },
+  {
+    "rank": 25,
+    "symbol": "ACFL",
+    "count": 16,
+    "scientific_name": "acer floridanum",
+    "common_name": "southern sugar maple"
+  },
+  {
+    "rank": 26,
+    "symbol": "QUPA2",
+    "count": 16,
+    "scientific_name": "quercus palustris",
+    "common_name": "pin oak"
+  },
+  {
+    "rank": 27,
+    "symbol": "CRPH",
+    "count": 15,
+    "scientific_name": "crataegus phaenopyrum",
+    "common_name": "Washington hawthorn"
+  },
+  {
+    "rank": 28,
+    "symbol": "CEJA2",
+    "count": 14,
+    "scientific_name": "cercidiphyllum japonicum",
+    "common_name": "katsura tree"
+  },
+  {
+    "rank": 29,
+    "symbol": "AEHI",
+    "count": 14,
+    "scientific_name": "aesculus hippocastanum",
+    "common_name": "horse chestnut"
+  },
+  {
+    "rank": 30,
+    "symbol": "SOAU",
+    "count": 14,
+    "scientific_name": "sorbus aucuparia",
+    "common_name": "European mountain ash"
+  },
+  {
+    "rank": 31,
+    "symbol": "STJA5",
+    "count": 14,
+    "scientific_name": "styrax japonicus",
+    "common_name": "Japanese snowbell"
+  },
+  {
+    "rank": 32,
+    "symbol": "ACMA3",
+    "count": 13,
+    "scientific_name": "acer macrophyllum",
+    "common_name": "bigleaf maple"
+  },
+  {
+    "rank": 33,
+    "symbol": "PRAV",
+    "count": 12,
+    "scientific_name": "prunus avium",
+    "common_name": "sweet cherry"
+  },
+  {
+    "rank": 34,
+    "symbol": "TIPL",
+    "count": 12,
+    "scientific_name": "tilia platyphyllos",
+    "common_name": "largeleaf linden"
+  },
+  {
+    "rank": 35,
+    "symbol": "CECA4",
+    "count": 11,
+    "scientific_name": "cercis canadensis",
+    "common_name": "eastern redbud"
+  },
+  {
+    "rank": 36,
+    "symbol": "QUCO2",
+    "count": 11,
+    "scientific_name": "quercus coccinea",
+    "common_name": "scarlet oak"
+  },
+  {
+    "rank": 37,
+    "symbol": "FASY",
+    "count": 11,
+    "scientific_name": "fagus sylvatica",
+    "common_name": "European beech"
+  },
+  {
+    "rank": 38,
+    "symbol": "ACGR14",
+    "count": 11,
+    "scientific_name": "acer griseum",
+    "common_name": "paperbark maple"
+  },
+  {
+    "rank": 39,
+    "symbol": "ULAM",
+    "count": 10,
+    "scientific_name": "ulmus americana",
+    "common_name": "American elm"
+  },
+  {
+    "rank": 40,
+    "symbol": "MAGR4",
+    "count": 10,
+    "scientific_name": "magnolia grandiflora",
+    "common_name": "southern magnolia"
+  },
+  {
+    "rank": 41,
+    "symbol": "ACCA5",
+    "count": 8,
+    "scientific_name": "acer campestre",
+    "common_name": "hedge maple"
+  },
+  {
+    "rank": 42,
+    "symbol": "ACCI",
+    "count": 8,
+    "scientific_name": "acer circinatum",
+    "common_name": "vine maple"
+  },
+  {
+    "rank": 43,
+    "symbol": "GIBI2",
+    "count": 8,
+    "scientific_name": "ginkgo biloba",
+    "common_name": "maidenhair tree"
+  },
+  {
+    "rank": 44,
+    "symbol": "TIAM",
+    "count": 7,
+    "scientific_name": "tilia americana",
+    "common_name": "American basswood"
+  },
+  {
+    "rank": 45,
+    "symbol": "THOC2",
+    "count": 7,
+    "scientific_name": "thuja occidentalis",
+    "common_name": "arborvitae"
+  },
+  {
+    "rank": 46,
+    "symbol": "TSHE",
+    "count": 7,
+    "scientific_name": "tsuga heterophylla",
+    "common_name": "western hemlock"
+  },
+  {
+    "rank": 47,
+    "symbol": "CHLA",
+    "count": 7,
+    "scientific_name": "chamaecyparis lawsoniana",
+    "common_name": "Port Orford cedar"
+  },
+  {
+    "rank": 48,
+    "symbol": "ROPS",
+    "count": 7,
+    "scientific_name": "robinia pseudoacacia",
+    "common_name": "black locust"
+  },
+  {
+    "rank": 49,
+    "symbol": "ILAQ80",
+    "count": 7,
+    "scientific_name": "ilex aquifolium",
+    "common_name": "English holly"
+  },
+  {
+    "rank": 50,
+    "symbol": "PIAB",
+    "count": 6,
+    "scientific_name": "picea abies",
+    "common_name": "Norway spruce"
+  }
+]
