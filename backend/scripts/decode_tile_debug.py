@@ -32,14 +32,22 @@ for layer_name in ['landuse', 'landcover', 'building', 'park']:
         continue
     print(f"Layer {layer_name} has {len(layer)} features.")
     # Print first feature's geometry and properties
-    feat = layer[0] if layer else None
+    print(f"Layer type: {type(layer)}")
+    if isinstance(layer, dict):
+        print(f"Layer keys: {layer.keys()}")
+        if 'features' in layer:
+            feat = layer['features'][0] if layer['features'] else None
+        else:
+            feat = None
+    else:
+        feat = layer[0] if layer else None
     if feat:
         print(f"Sample feature in {layer_name}:")
         print(f"  type: {feat.get('type')}")
         print(f"  properties: {feat.get('properties')}")
         print(f"  geometry: {feat.get('geometry')}")
         try:
-            geom_shape = shape({'type': feat.get('type', 'Polygon'), 'coordinates': feat.get('geometry')})
+            geom_shape = shape(feat.get('geometry'))
             print(f"  bounds: {geom_shape.bounds}")
         except Exception as e:
             print(f"  Could not build shapely geometry: {e}")

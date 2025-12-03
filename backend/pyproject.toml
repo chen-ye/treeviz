@@ -23,6 +23,7 @@ dependencies = [
     "openmeteo-requests>=1.1.0",
     "retry-requests>=2.0.0",
     "astral>=3.0",
+    "debugpy>=1.8.17",
 ]
 
 [project.optional-dependencies]

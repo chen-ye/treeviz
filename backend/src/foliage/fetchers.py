@@ -196,11 +196,27 @@ class OpenFreeMapLandUseFetcher:
         "residential",
         "commercial",
         "retail",
+        "bus_station",
+        "school",
+        "university",
+        "kindergarten",
+        "college",
+        "library",
+        "hospital",
+        "stadium",
         "industrial",
         "brownfield",
         "construction",
         "quarry",
         "urban",
+        "garages",
+        "religious_ground",
+        "education",
+        "military",
+        "railway",
+        "theme_park",
+        "suburb",
+        "neighbourhood",
     }
 
     NON_URBAN_TAGS = {
@@ -210,6 +226,24 @@ class OpenFreeMapLandUseFetcher:
         "meadow",
         "farmland",
         "orchard",
+        "allotments",
+        "recreation_ground",
+        "cemetery",
+        "garden",
+        "village_green",
+        "beach",
+        "greenfield",
+        "rock",
+        "dry_swamp",
+        "greenery",
+        "wood",
+        "national_park",
+        "nature_reserve",
+        "protected_area",
+        "wetland",
+        "pitch",
+        "playground",
+        "zoo",
     }
 
     def __init__(self, zoom=14, cache_name=".ofm_tiles_cache", cache_expire=604800):
@@ -301,7 +335,7 @@ class OpenFreeMapLandUseFetcher:
         except Exception:
             return None
 
-    def _tile_geom_to_lonlat(self, geom, tile_x, tile_y, z):
+    def _tile_geom_to_lonlat(self, coords, tile_x, tile_y, z):
         """
         Convert geometry coordinates from tile space (0..extent) to lon/lat.
         Accepts GeoJSON-like coordinate sequences and returns transformed sequences.
@@ -319,26 +353,28 @@ class OpenFreeMapLandUseFetcher:
         def conv_coords(coords):
             return [conv_coord(tuple(c)) for c in coords]
 
-        # geom can be nested (Polygon -> list of rings), MultiPolygon -> list of polygons
-        if isinstance(geom[0][0], (list, tuple)):
+        # coords can be nested (Polygon -> list of rings), MultiPolygon -> list of polygons
+        if isinstance(coords[0][0], (list, tuple)):
             # Polygon or MultiPolygon
-            if isinstance(geom[0][0][0], (list, tuple)):
+            if isinstance(coords[0][0][0], (list, tuple)):
                 # MultiPolygon: list of polygons where each polygon is list of rings
-                return [[conv_coords(ring) for ring in poly] for poly in geom]
+                return [[conv_coords(ring) for ring in poly] for poly in coords]
             else:
                 # Polygon: list of rings
-                return [conv_coords(ring) for ring in geom]
+                return [conv_coords(ring) for ring in coords]
         else:
             # LineString or single ring
-            return conv_coords(geom)
+            return conv_coords(coords)
 
-    def _extract_polygons(self, decoded, tile_x, tile_y, z):
+    def _extract_polygons(self, decoded, tile_x, tile_y, z, layer_names):
         """Return list of tuples (shapely_geom, properties)"""
         polygons = []
         if not decoded:
             return polygons
-
-        for layer_name, layer in decoded.items():
+        for layer_name in layer_names:
+            layer = decoded.get(layer_name)
+            if not layer:
+                continue
             # `mapbox_vector_tile.decode` can return either:
             # - layer -> {'features': [ ... ]} or
             # - layer -> [ feature, feature, ... ]
@@ -370,17 +406,21 @@ class OpenFreeMapLandUseFetcher:
                 geom = feat.get("geometry")
                 if geom is None:
                     continue
+                coords = geom.get('coordinates')
+                geom_type = geom.get('type')
+                if geom_type == 'Point':
+                    continue
 
                 # If the geometry appears to already be lon/lat, try to build directly
                 try:
                     first_coord = None
-                    if geom:
+                    if coords:
                         # drill down to first numeric coordinate
-                        if isinstance(geom[0][0], (int, float)):
-                            first_coord = geom[0]
+                        if isinstance(coords[0][0], (int, float)):
+                            first_coord = coords[0]
                         else:
                             # polygon/multipolygon
-                            iter0 = geom
+                            iter0 = coords
                             while iter0 and isinstance(iter0[0], list):
                                 iter0 = iter0[0]
                             if iter0 and isinstance(iter0[0], (int, float)):
@@ -395,16 +435,18 @@ class OpenFreeMapLandUseFetcher:
 
                 try:
                     if lonlat_mode:
-                        geom_shape = shape({"type": feat.get("type", "Polygon"), "coordinates": geom})
+                        geom_shape = shape(geom)
                     else:
                         # convert tile coords to lon/lat
-                        conv = self._tile_geom_to_lonlat(geom, tile_x, tile_y, z)
-                        geom_shape = shape({"type": feat.get("type", "Polygon"), "coordinates": conv})
+                        conv = self._tile_geom_to_lonlat(coords, tile_x, tile_y, z)
+                        geom_shape = shape({"type": geom.get("type", "Polygon"), "coordinates": conv})
 
                     # keep only polygonal geometries
                     if isinstance(geom_shape, (Polygon, MultiPolygon)):
                         polygons.append((geom_shape, props))
-                except Exception:
+                except Exception as e:
+                    print("Failed to decode geometry for feature:", feat)
+                    print("Error:", e)
                     # decoding/geometry construction failed for this feature
                     continue
 
@@ -435,7 +477,7 @@ class OpenFreeMapLandUseFetcher:
             return self.fallback.is_urban_environment(lat, lon)
 
         decoded = self._decode_tile(tile_content)
-        polygons = self._extract_polygons(decoded, x, y, z)
+        polygons = self._extract_polygons(decoded, x, y, z, ['landuse', 'landcover', 'park', 'building'])
 
         pt = Point(lon, lat)
         # check polygons
@@ -467,7 +509,8 @@ class OpenFreeMapLandUseFetcher:
         total_points = len(points)
         points_done = 0
         for (tx, ty, tz), pts in groups.items():
-            print(f"Processing tile {tz}/{tx}/{ty} for {len(pts)} points... ({points_done + len(pts)}/{total_points} total)")
+            points_done = points_done + len(pts)
+            print(f"Processing tile {tz}/{tx}/{ty} for {len(pts)} points... ({points_done}/{total_points} total)")
             tile_content = self._fetch_tile(tx, ty, tz)
             if tile_content:
                 try:
@@ -477,7 +520,7 @@ class OpenFreeMapLandUseFetcher:
             else:
                 print(f"  tile {tz}/{tx}/{ty} not available; will fallback for contained points")
             decoded = self._decode_tile(tile_content) if tile_content else None
-            polygons = self._extract_polygons(decoded, tx, ty, tz)
+            polygons = self._extract_polygons(decoded, tx, ty, tz, ['landuse', 'landcover', 'park', 'building'])
 
             # Build STRtree for spatial index (if polygons exist)
             if polygons:
@@ -499,11 +542,11 @@ class OpenFreeMapLandUseFetcher:
                 print(f"    Point ({lat:.5f}, {lon:.5f}) has {len(candidates)} candidate polygons")
 
                 # Find the first candidate polygon that contains/touches the point and has a decisive tag
-                for geom in candidates:
+                for idx in candidates:
                     # Find the associated properties
-                    idx = geoms.index(geom)
                     props = polygons[idx][1]
                     try:
+                        geom = geoms[idx]
                         if geom.contains(pt) or geom.touches(pt):
                             hit = self._properties_indicate_urban(props)
                             if hit is not None:
@@ -516,7 +559,9 @@ class OpenFreeMapLandUseFetcher:
                         continue
 
                 if matched is None:
-                    matched = self.fallback.is_urban_environment(lat, lon)
+                    pass
+                    # print("Falling back to overpass for point", lat, lon)
+                    # matched = self.fallback.is_urban_environment(lat, lon)
                 results[i] = matched
 
         return results
