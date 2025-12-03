@@ -1,12 +1,16 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { Deck } from '@deck.gl/core';
+import { MapboxOverlay } from '@deck.gl/mapbox';
+import maplibregl from 'maplibre-gl';
+import mapLibreCss from 'maplibre-gl/dist/maplibre-gl.css?inline';
 import { PhenologyLayer } from './phenology-layer';
 import { Texture } from '@luma.gl/core';
 
 @customElement('foliage-map')
 export class FoliageMap extends LitElement {
-  static styles = css`
+  static styles = [
+    unsafeCSS(mapLibreCss),
+    css`
     :host {
       display: block;
       width: 100%;
@@ -20,9 +24,14 @@ export class FoliageMap extends LitElement {
     canvas {
         display: block;
     }
-  `;
+    .maplibregl-map {
+      height: 100%;
+      width: 100%;
+    }
+  `];
 
-  private deck: Deck | null = null;
+  private deck: MapboxOverlay | null = null;
+  private map: maplibregl.Map | null = null;
   private atlasTexture: Texture | null = null;
   private atlasMapping: Record<string, number> = {};
 
@@ -33,7 +42,7 @@ export class FoliageMap extends LitElement {
     const container = this.shadowRoot?.getElementById('map-container');
     if (container) {
       await this.loadMetadata();
-      this.initDeck(container as HTMLDivElement);
+      this.initMap(container as HTMLDivElement);
     }
   }
 
@@ -48,17 +57,18 @@ export class FoliageMap extends LitElement {
     }
   }
 
-  initDeck(container: HTMLDivElement) {
-    this.deck = new Deck({
-      parent: container,
-      initialViewState: {
-        longitude: -122.3321,
-        latitude: 47.6062,
-        zoom: 12,
-        pitch: 0,
-        bearing: 0
-      },
-      controller: true,
+  initMap(container: HTMLDivElement) {
+    this.map = new maplibregl.Map({
+      container,
+      style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+      center: [-122.3321, 47.6062],
+      zoom: 12,
+      pitch: 0,
+      bearing: 0
+    });
+
+    this.deck = new MapboxOverlay({
+      layers: [],
       onDeviceInitialized: (device) => {
           // Load Atlas Texture
           const image = new Image();
@@ -78,9 +88,10 @@ export class FoliageMap extends LitElement {
               this.updateLayers();
           };
           image.src = './api/phenology/atlas.png';
-      },
-      layers: []
+      }
     });
+
+    this.map.addControl(this.deck);
 
     // Initial render attempt (will be empty layers until texture loads)
     this.updateLayers();
