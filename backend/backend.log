@@ -1,0 +1,10 @@
+warning: `VIRTUAL_ENV=venv` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+   Building foliage @ file:///app/backend
+      Built foliage @ file:///app/backend
+Uninstalled 1 package in 2ms
+Installed 1 package in 4ms
+INFO:     Started server process [18328]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:46880 - "GET /api/health HTTP/1.1" 200 OK

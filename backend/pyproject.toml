@@ -1,0 +1,33 @@
+[project]
+name = "foliage"
+version = "0.1.0"
+description = "Backend for Foliage Map"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.100.0",
+    "uvicorn>=0.20.0",
+    "psycopg2-binary>=2.9.0",
+    "geoalchemy2>=0.14.0",
+    "sqlalchemy>=2.0.0",
+    "pandas>=2.0.0",
+    "requests>=2.30.0",
+    "shapely>=2.0.0",
+    "httpx>=0.24.0",
+    "pillow>=12.0.0",
+    "numpy>=2.3.5",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "isort>=5.0.0"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/foliage"]

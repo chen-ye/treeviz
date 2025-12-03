@@ -1,0 +1,42 @@
+{
+  "ACPL": {
+    "common_name": "Norway Maple",
+    "fall_start_doy": 280,
+    "fall_peak_doy": 305,
+    "fall_end_doy": 330,
+    "peak_color": [255, 165, 0],
+    "color_variance": 0.1
+  },
+  "ACRU": {
+    "common_name": "Red Maple",
+    "fall_start_doy": 265,
+    "fall_peak_doy": 290,
+    "fall_end_doy": 315,
+    "peak_color": [220, 20, 60],
+    "color_variance": 0.2
+  },
+  "PRCE2": {
+    "common_name": "Cherry Plum",
+    "fall_start_doy": 290,
+    "fall_peak_doy": 310,
+    "fall_end_doy": 325,
+    "peak_color": [178, 34, 34],
+    "color_variance": 0.15
+  },
+  "LIST2": {
+    "common_name": "Sweetgum",
+    "fall_start_doy": 295,
+    "fall_peak_doy": 315,
+    "fall_end_doy": 340,
+    "peak_color": [255, 69, 0],
+    "color_variance": 0.3
+  },
+  "PRSE3": {
+    "common_name": "Japanese Flowering Cherry",
+    "fall_start_doy": 295,
+    "fall_peak_doy": 310,
+    "fall_end_doy": 325,
+    "peak_color": [255, 140, 0],
+    "color_variance": 0.1
+  }
+}
