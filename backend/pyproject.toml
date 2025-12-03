@@ -32,3 +32,6 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/foliage"]
+
+[tool.hatch.envs.default.scripts]
+run = "uvicorn foliage.main:app --reload"
