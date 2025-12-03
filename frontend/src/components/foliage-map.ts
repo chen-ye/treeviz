@@ -33,7 +33,7 @@ export class FoliageMap extends LitElement {
     const container = this.shadowRoot?.getElementById('map-container');
     if (container) {
       await this.loadMetadata();
-      this.initDeck(container as HTMLElement);
+      this.initDeck(container as HTMLDivElement);
     }
   }
 
@@ -48,9 +48,9 @@ export class FoliageMap extends LitElement {
     }
   }
 
-  initDeck(container: HTMLElement) {
+  initDeck(container: HTMLDivElement) {
     this.deck = new Deck({
-      parent: container as any,
+      parent: container,
       initialViewState: {
         longitude: -122.3321,
         latitude: 47.6062,
@@ -59,23 +59,20 @@ export class FoliageMap extends LitElement {
         bearing: 0
       },
       controller: true,
-      onWebGLInitialized: (gl) => {
+      onDeviceInitialized: (device) => {
           // Load Atlas Texture
           const image = new Image();
           image.crossOrigin = "Anonymous";
           image.onload = () => {
-              // @ts-ignore
-              this.atlasTexture = new Texture(gl, {
+              this.atlasTexture = device.createTexture({
                   data: image,
-                  parameters: {
-                      // @ts-ignore
-                      [gl.TEXTURE_MIN_FILTER]: gl.NEAREST,
-                      // @ts-ignore
-                      [gl.TEXTURE_MAG_FILTER]: gl.NEAREST,
-                      // @ts-ignore
-                      [gl.TEXTURE_WRAP_S]: gl.CLAMP_TO_EDGE,
-                      // @ts-ignore
-                      [gl.TEXTURE_WRAP_T]: gl.CLAMP_TO_EDGE
+                  width: image.width,
+                  height: image.height,
+                  sampler: {
+                      minFilter: 'nearest',
+                      magFilter: 'nearest',
+                      addressModeU: 'clamp-to-edge',
+                      addressModeV: 'clamp-to-edge'
                   }
               });
               this.updateLayers();
@@ -102,7 +99,6 @@ export class FoliageMap extends LitElement {
           id: 'phenology-layer',
           data: 'http://localhost:8000/api/trees?limit=2000',
           getPosition: (d: any) => d.position,
-          // @ts-ignore
           getSpeciesIndex: (d: any) => {
               const idx = this.atlasMapping[d.species];
               return idx !== undefined ? idx : this.atlasMapping['DEFAULT'] || 0;
