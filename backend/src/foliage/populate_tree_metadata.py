@@ -3,27 +3,35 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from .database import SessionLocal, Tree
-from .fetchers import TiledElevationFetcher, SimpleLandUseFetcher
+from .fetchers import TiledElevationFetcher, OpenFreeMapLandUseFetcher
 from sqlalchemy import text
 import time
+import argparse
 
-def populate_tree_metadata_fast():
+def populate_tree_metadata_fast(overwrite: bool = False):
     """
     Fast batch population using tiled data sources.
 
     Performance: ~5-10 seconds for 2000 trees (vs 15+ minutes with individual API calls)
     """
     print("Populating per-tree metadata using tiled data sources...")
-    print("This should take ~5-10 seconds instead of 15+ minutes!")
+    if overwrite:
+        print("Overwrite mode: existing elevation/is_urban values will be replaced.")
 
     db = SessionLocal()
     try:
         # Get all trees needing metadata
-        stmt = text("""
-            SELECT id, ST_X(geom) as lon, ST_Y(geom) as lat
-            FROM trees
-            WHERE elevation IS NULL OR is_urban IS NULL
-        """)
+        if overwrite:
+            stmt = text("""
+                SELECT id, ST_X(geom) as lon, ST_Y(geom) as lat
+                FROM trees
+            """)
+        else:
+            stmt = text("""
+                SELECT id, ST_X(geom) as lon, ST_Y(geom) as lat
+                FROM trees
+                WHERE elevation IS NULL OR is_urban IS NULL
+            """)
 
         trees = db.execute(stmt).fetchall()
         total = len(trees)
@@ -35,26 +43,30 @@ def populate_tree_metadata_fast():
         print(f"Found {total} trees needing metadata.")
         print("Initializing tiled data fetchers...")
 
-        # Initialize fetchers (these cache tiles)
+        # Initialize fetchers (these cache tiles). Use OpenFreeMap vector tiles for landuse.
         elev_fetcher = TiledElevationFetcher(zoom=14)  # ~30m resolution
-        land_fetcher = SimpleLandUseFetcher()
+        land_fetcher = OpenFreeMapLandUseFetcher(zoom=14)
 
         print("Fetching data...")
+        # Prepare batch landuse lookup to reduce tile requests
+        points = [(t.lat, t.lon) for t in trees]
+        urban_results = land_fetcher.is_urban_batch(points)
+
         start_time = time.time()
 
-        # Process all trees
+        # Process all trees — use batch landuse results and per-tree elevation
+        update_stmt = text("""
+            UPDATE trees
+            SET elevation = :elevation, is_urban = :is_urban
+            WHERE id = :tree_id
+        """)
+
         for i, tree in enumerate(trees):
-            # Fetch metadata (fetcher caches tiles internally)
+            # Fetch elevation (tile-cached)
             elevation = elev_fetcher.get_elevation(tree.lat, tree.lon)
-            is_urban = land_fetcher.is_urban_environment(tree.lat, tree.lon)
+            is_urban = urban_results[i]
 
             # Update tree
-            update_stmt = text("""
-                UPDATE trees
-                SET elevation = :elevation, is_urban = :is_urban
-                WHERE id = :tree_id
-            """)
-
             db.execute(update_stmt, {
                 "elevation": elevation,
                 "is_urban": is_urban,
@@ -88,4 +100,8 @@ def populate_tree_metadata_fast():
         db.close()
 
 if __name__ == "__main__":
-    populate_tree_metadata_fast()
+    parser = argparse.ArgumentParser(description="Populate per-tree elevation and urban metadata (fast tiled mode).")
+    parser.add_argument("--overwrite", action="store_true", help="Overwrite existing elevation/is_urban values for all trees")
+    args = parser.parse_args()
+
+    populate_tree_metadata_fast(overwrite=args.overwrite)
