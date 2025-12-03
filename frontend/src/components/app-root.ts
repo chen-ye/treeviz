@@ -3,6 +3,7 @@ import { customElement } from 'lit/decorators.js';
 import '@shoelace-style/shoelace/dist/themes/light.css';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
 import '@shoelace-style/shoelace/dist/components/icon/icon.js';
+import { FoliageMap } from './foliage-map';
 
 @customElement('app-root')
 export class AppRoot extends LitElement {
@@ -40,7 +41,7 @@ export class AppRoot extends LitElement {
   // Here we assume app-root orchestrates.
 
   handleDateChange(e: CustomEvent) {
-      const map = this.querySelector('foliage-map') as any;
+      const map = this.querySelector('foliage-map') as FoliageMap;
       if (map) {
           map.dayOfYear = e.detail.dayOfYear;
       }

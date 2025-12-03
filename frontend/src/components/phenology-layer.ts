@@ -1,5 +1,4 @@
 import { ScatterplotLayer } from '@deck.gl/layers';
-import { GL } from '@luma.gl/constants';
 import type { ScatterplotLayerProps } from '@deck.gl/layers';
 import type { Texture } from '@luma.gl/core';
 import type { DefaultProps } from '@deck.gl/core';
@@ -73,13 +72,11 @@ export class PhenologyLayer<DataT = any, ExtraPropsT = {}> extends ScatterplotLa
 
   initializeState() {
     super.initializeState();
-    // @ts-ignore
     this.getAttributeManager()?.add({
       instanceSpecies: {
         size: 1,
         accessor: 'getSpeciesIndex',
-        // @ts-ignore
-        type: GL.FLOAT
+        type: 'float32'
       }
     });
   }
