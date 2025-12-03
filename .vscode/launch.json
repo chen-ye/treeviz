@@ -10,7 +10,9 @@
         "src.foliage.main:app",
         "--reload",
         "--port",
-        "8000"
+        "8000",
+        "--env-file",
+        ".env"
       ],
       "cwd": "${workspaceFolder}/backend",
       "env": {

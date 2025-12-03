@@ -40,7 +40,7 @@ export class FoliageMap extends LitElement {
   async loadMetadata() {
     try {
         // Fetch Mapping
-        const metaRes = await fetch('http://localhost:8000/api/metadata');
+        const metaRes = await fetch('./api/metadata');
         const meta = await metaRes.json();
         this.atlasMapping = meta.atlas_mapping || {};
     } catch(e) {
@@ -77,7 +77,7 @@ export class FoliageMap extends LitElement {
               });
               this.updateLayers();
           };
-          image.src = 'http://localhost:8000/api/phenology/atlas.png';
+          image.src = './api/phenology/atlas.png';
       },
       layers: []
     });
@@ -97,7 +97,7 @@ export class FoliageMap extends LitElement {
 
       const layer = new PhenologyLayer({
           id: 'phenology-layer',
-          data: 'http://localhost:8000/api/trees?limit=2000',
+          data: './api/trees?limit=2000',
           getPosition: (d: any) => d.position,
           getSpeciesIndex: (d: any) => {
               const idx = this.atlasMapping[d.species];

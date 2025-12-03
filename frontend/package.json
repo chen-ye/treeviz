@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "interactive-update": "ncu --interactive"
   },
   "dependencies": {
     "@deck.gl/mapbox": "^9.2.2",
@@ -24,8 +25,9 @@
     "@playwright/test": "^1.57.0",
     "@types/three": "^0.181.0",
     "happy-dom": "^20.0.11",
+    "npm-check-updates": "^19.1.2",
     "typescript": "~5.9.3",
-    "vite": "^7.2.4",
-    "vitest": "^4.0.14"
+    "vite": "^7.2.6",
+    "vitest": "^4.0.15"
   }
 }
