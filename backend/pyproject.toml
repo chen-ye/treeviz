@@ -34,4 +34,4 @@ build-backend = "hatchling.build"
 packages = ["src/foliage"]
 
 [tool.hatch.envs.default.scripts]
-run = "uvicorn foliage.main:app --reload"
+dev = "uvicorn foliage.main:app --reload"
