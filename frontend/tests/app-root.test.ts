@@ -26,8 +26,4 @@ describe('AppRoot', () => {
     const map = element.shadowRoot?.querySelector('foliage-map');
     expect(map).toBeTruthy();
   });
-
-  // Note: timeline-slider is used in template but not defined in the code I saw earlier.
-  // Wait, I saw <timeline-slider> in app-root.ts but I didn't see the file for it in file list.
-  // Let's check if timeline-slider is a real component or just a placeholder in my previous read.
 });

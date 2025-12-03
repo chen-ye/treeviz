@@ -55,8 +55,6 @@ describe('FoliageMap', () => {
   });
 
   it('initializes Deck', async () => {
-      // Access private deck property if possible or infer from side effects.
-      // Since it's private, we can't easily access it in TS without casting to any.
       const deck = (element as any).deck;
       expect(deck).toBeTruthy();
   });
