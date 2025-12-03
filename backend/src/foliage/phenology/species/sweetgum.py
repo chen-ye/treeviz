@@ -3,26 +3,71 @@ from ..base import TreePhenologyModel
 
 class Sweetgum(TreePhenologyModel):
     """
-    Liquidambar styraciflua. Late fall color, highly variable vibrant mix (Red/Purple/Yellow).
+    Liquidambar styraciflua.
+    Late leaf out.
+    Late fall color.
+    Highly variable vibrant mix (Red/Purple/Yellow).
     """
     def _resolve_daily_color(self, row) -> tuple[int, int, int]:
-        summer_green = (34, 139, 34)
-        vibrant_red = (220, 20, 60)
-        deep_purple = (75, 0, 130)
-        brown = (101, 67, 33)
+        # Phase 1: Palette
+        structure_grey = (100, 90, 80)
+        juvenile_green = (120, 160, 80)
+        mature_green = (34, 139, 34)
+        fall_red = (220, 20, 60)
+        fall_purple = (75, 0, 130)
+        fall_yellow = (240, 200, 50)
+        bare_brown = (101, 67, 33)
 
-        if row['accumulated_gdd'] < 250: return (100, 90, 80) # Late waker
-        if not row['is_fall_season']: return summer_green
-        if row['recent_freeze']: return brown
+        # --- Inputs ---
+        gdd = row['accumulated_gdd']
+        day_length = row['day_length']
+        drought = row['drought_stress']
+        is_freeze = row['recent_freeze']
 
-        chill = row['accumulated_chill']
+        # --- Logic ---
 
-        # Sweetgum needs MORE chill to start turning than maple
-        if chill < 200:
-            return summer_green
-        elif 200 <= chill < 500:
-            # Mix of red and purple based on UV/Sun
-            target = vibrant_red if row['uv_stress_factor'] > 0.2 else deep_purple
-            return self._interp(summer_green, target, (chill-200)/300)
+        # 1. Spring (GDD)
+        # Late leaf out: ~250 start, ~350 mature
+        leaf_start = self.get_adjusted_threshold(250, 'gdd')
+        leaf_mature = self.get_adjusted_threshold(350, 'gdd')
+
+        if gdd < leaf_start:
+            return structure_grey
+
+        if gdd < leaf_mature:
+            progress = self._calc_progress(gdd, leaf_start, leaf_mature)
+            return self._interp_hsl(juvenile_green, mature_green, progress)
+
+        # 2. Summer -> Fall
+        # Very late fall color.
+        fall_start_dl = 11.0 + (drought * 1.5)
+        fall_peak_dl = 10.0
+        fall_end_dl = 9.0
+
+        if day_length > fall_start_dl and not is_freeze:
+            return mature_green
+
+        # 3. Fall Progression
+        if is_freeze:
+            return bare_brown
+
+        # Determine peak color based on sun/stress
+        # High Sun (UV) -> Red/Purple. Low Sun -> Yellow.
+        uv = row['uv_stress_factor']
+        if uv > 0.5:
+            target_peak = fall_purple
+        elif uv > 0.2:
+            target_peak = fall_red
         else:
-            return brown
+            target_peak = fall_yellow
+
+        if day_length > fall_peak_dl:
+            # Green -> Target
+            progress = self._calc_progress(fall_start_dl - day_length, 0, fall_start_dl - fall_peak_dl)
+            return self._interp_hsl(mature_green, target_peak, progress)
+        elif day_length > fall_end_dl:
+            # Target -> Brown
+            progress = self._calc_progress(fall_peak_dl - day_length, 0, fall_peak_dl - fall_end_dl)
+            return self._interp_hsl(target_peak, bare_brown, progress)
+        else:
+            return bare_brown
