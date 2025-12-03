@@ -36,14 +36,6 @@ class TiledElevationFetcher:
         self.tile_cache = {}
         self.base_url = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium"
 
-    def lat_lon_to_tile(self, lat, lon, zoom):
-        """Convert lat/lon to tile coordinates (x, y, z)."""
-        lat_rad = math.radians(lat)
-        n = 2.0 ** zoom
-        x = int((lon + 180.0) / 360.0 * n)
-        y = int((1.0 - math.asinh(math.tan(lat_rad)) / math.pi) / 2.0 * n)
-        return (x, y, zoom)
-
     def get_tile(self, x, y, z):
         """Fetch and cache a terrain tile."""
         key = (x, y, z)
@@ -68,8 +60,8 @@ class TiledElevationFetcher:
         Returns:
             Elevation in meters, or None if unavailable.
         """
-        x, y, z = self.lat_lon_to_tile(lat, lon, self.zoom)
-        tile = self.get_tile(x, y, z)
+        t = mercantile.tile(lon, lat, self.zoom)
+        tile = self.get_tile(t.x, t.y, t.z)
 
         if tile is None:
             return None
