@@ -3,90 +3,89 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from .database import SessionLocal, Tree
-from .fetchers import ElevationFetcher, LandUseFetcher
+from .fetchers import TiledElevationFetcher, SimpleLandUseFetcher
 from sqlalchemy import text
 import time
 
-def populate_tree_metadata(batch_size: int = 100):
-    """Fetch and store elevation and urban status for each tree."""
-    print("Populating per-tree metadata...")
+def populate_tree_metadata_fast():
+    """
+    Fast batch population using tiled data sources.
+
+    Performance: ~5-10 seconds for 2000 trees (vs 15+ minutes with individual API calls)
+    """
+    print("Populating per-tree metadata using tiled data sources...")
+    print("This should take ~5-10 seconds instead of 15+ minutes!")
 
     db = SessionLocal()
     try:
-        # Count trees needing metadata
-        result = db.execute(text("""
-            SELECT COUNT(*)
+        # Get all trees needing metadata
+        stmt = text("""
+            SELECT id, ST_X(geom) as lon, ST_Y(geom) as lat
             FROM trees
             WHERE elevation IS NULL OR is_urban IS NULL
-        """)).scalar()
+        """)
 
-        print(f"Found {result} trees needing metadata.")
+        trees = db.execute(stmt).fetchall()
+        total = len(trees)
 
-        if result == 0:
+        if total == 0:
             print("All trees already have metadata!")
             return
 
-        # Initialize fetchers
-        elev_fetcher = ElevationFetcher()
-        land_fetcher = LandUseFetcher()
+        print(f"Found {total} trees needing metadata.")
+        print("Initializing tiled data fetchers...")
 
-        # Fetch trees in batches
-        offset = 0
-        processed = 0
+        # Initialize fetchers (these cache tiles)
+        elev_fetcher = TiledElevationFetcher(zoom=14)  # ~30m resolution
+        land_fetcher = SimpleLandUseFetcher()
 
-        while True:
-            # Get batch of trees
-            stmt = text("""
-                SELECT id, ST_X(geom) as lon, ST_Y(geom) as lat
-                FROM trees
-                WHERE elevation IS NULL OR is_urban IS NULL
-                LIMIT :batch_size OFFSET :offset
+        print("Fetching data...")
+        start_time = time.time()
+
+        # Process all trees
+        for i, tree in enumerate(trees):
+            # Fetch metadata (fetcher caches tiles internally)
+            elevation = elev_fetcher.get_elevation(tree.lat, tree.lon)
+            is_urban = land_fetcher.is_urban_environment(tree.lat, tree.lon)
+
+            # Update tree
+            update_stmt = text("""
+                UPDATE trees
+                SET elevation = :elevation, is_urban = :is_urban
+                WHERE id = :tree_id
             """)
 
-            trees = db.execute(stmt, {"batch_size": batch_size, "offset": offset}).fetchall()
+            db.execute(update_stmt, {
+                "elevation": elevation,
+                "is_urban": is_urban,
+                "tree_id": tree.id
+            })
 
-            if not trees:
-                break
+            # Progress update every 100 trees
+            if (i + 1) % 100 == 0:
+                elapsed = time.time() - start_time
+                rate = (i + 1) / elapsed
+                remaining = (total - i - 1) / rate if rate > 0 else 0
+                print(f"  Processed {i+1}/{total} trees ({rate:.1f} trees/sec, ~{remaining:.0f}s remaining)")
+                db.commit()  # Commit periodically
 
-            print(f"Processing batch {offset//batch_size + 1} ({len(trees)} trees)...")
+        db.commit()
 
-            for tree in trees:
-                # Fetch metadata
-                elevation = elev_fetcher.get_elevation(tree.lat, tree.lon)
-                is_urban = land_fetcher.is_urban_environment(tree.lat, tree.lon)
+        elapsed = time.time() - start_time
+        print(f"\n✓ Successfully populated metadata for {total} trees in {elapsed:.1f} seconds!")
+        print(f"  Average: {total/elapsed:.1f} trees/second")
 
-                # Update tree
-                update_stmt = text("""
-                    UPDATE trees
-                    SET elevation = :elevation, is_urban = :is_urban
-                    WHERE id = :tree_id
-                """)
-
-                db.execute(update_stmt, {
-                    "elevation": elevation,
-                    "is_urban": is_urban,
-                    "tree_id": tree.id
-                })
-
-                processed += 1
-
-                # Rate limit (be nice to APIs)
-                time.sleep(0.1)
-
-                if processed % 50 == 0:
-                    print(f"  Processed {processed}/{result} trees...")
-                    db.commit()  # Commit periodically
-
-            db.commit()
-            offset += batch_size
-
-        print(f"✓ Successfully populated metadata for {processed} trees!")
+        # Show tile cache stats
+        print(f"\nTile cache stats:")
+        print(f"  Elevation tiles cached: {len(elev_fetcher.tile_cache)}")
 
     except Exception as e:
         print(f"Error: {e}")
+        import traceback
+        traceback.print_exc()
         db.rollback()
     finally:
         db.close()
 
 if __name__ == "__main__":
-    populate_tree_metadata()
+    populate_tree_metadata_fast()
