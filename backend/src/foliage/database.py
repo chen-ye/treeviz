@@ -39,6 +39,10 @@ class Tree(Base):
     # Weather Grid Reference
     weather_grid_cell_id = Column(Integer, ForeignKey('weather_grid_cells.id'), nullable=True)
 
+    # Per-Tree Microclimate Metadata (for adjustment factors)
+    elevation = Column(Float, nullable=True)  # meters
+    is_urban = Column(Boolean, nullable=True)
+
     # species = relationship("SpeciesRef")
 
 class WeatherGridCell(Base):

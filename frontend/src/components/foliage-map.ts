@@ -62,6 +62,11 @@ export class FoliageMap extends SignalWatcher(LitElement) {
     return idx !== undefined ? idx : this.atlasMapping['DEFAULT'] || 0;
   };
 
+  // Accessor for per-tree phenology adjustment
+  private adjustmentDaysAccessor = (d: any) => {
+    return d.adjustment_days || 0;
+  };
+
   // For PhenologyExtension compatibility
   // getPhenologySpeciesIndex is passed as a prop to ScatterplotLayer
 
@@ -170,6 +175,7 @@ export class FoliageMap extends SignalWatcher(LitElement) {
         data: './api/trees?limit=2000',
         getPosition: (d: any) => d.position,
         getPhenologySpeciesIndex: this.speciesIndexAccessor,
+        getPhenologyAdjustmentDays: this.adjustmentDaysAccessor,
         phenologyAtlas: this.atlasTexture,
         phenologyAtlasHeight: atlasHeight,
         phenologyTime: this.dayOfYear,

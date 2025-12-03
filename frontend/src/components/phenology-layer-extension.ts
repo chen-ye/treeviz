@@ -8,6 +8,7 @@ export type PhenologyExtensionProps = {
   phenologyTime?: number;
   phenologyAtlasHeight?: number;
   getPhenologySpeciesIndex?: (d: any) => number;
+  getPhenologyAdjustmentDays?: (d: any) => number;
 };
 
 // Define the UBO structure
@@ -24,18 +25,21 @@ const phenologyUniforms = {
       float time;
       float atlasHeight;
     } phenology;
-    
+
     in float instancePhenologySpecies;
+    in float instancePhenologyAdjustment;
     out float vPhenologySpecies;
+    out float vPhenologyAdjustment;
   `,
   fs: `
     uniform phenologyUniforms {
       float time;
       float atlasHeight;
     } phenology;
-    
+
     uniform sampler2D phenologyAtlas;
     in float vPhenologySpecies;
+    in float vPhenologyAdjustment;
   `,
   uniformTypes: {
     time: 'f32',
@@ -45,15 +49,20 @@ const phenologyUniforms = {
 
 /**
  * Layer extension that adds phenology visualization using a texture atlas.
- * 
+ *
  * This extension can be applied to any deck.gl layer (including composite layers like GeoJsonLayer)
  * to add time-based phenology coloring using a species index and texture atlas lookup.
- * 
+ *
+ * Features:
+ * - Species-specific phenology via atlas texture lookup
+ * - Per-tree timeline adjustment based on microclimate (elevation, urban heat island)
+ *
  * Usage:
  * ```ts
  * new ScatterplotLayer({
  *   data,
  *   getPhenologySpeciesIndex: d => d.speciesId,
+ *   getPhenologyAdjustmentDays: d => d.adjustment_days,
  *   phenologyAtlas: texture,
  *   phenologyTime: dayOfYear,
  *   phenologyAtlasHeight: 256,
@@ -68,10 +77,19 @@ export class PhenologyExtension extends LayerExtension<PhenologyExtensionProps> 
       inject: {
         'vs:#main-end': `
           vPhenologySpecies = instancePhenologySpecies;
+          vPhenologyAdjustment = instancePhenologyAdjustment;
         `,
         'fs:DECKGL_FILTER_COLOR': `
-          // Lookup phenology color from atlas texture using UBO values
-          float u = clamp(phenology.time / 365.0, 0.0, 1.0);
+          // Apply per-tree adjustment to the timeline
+          // Negative adjustment = earlier phenology (sample later in atlas)
+          // Positive adjustment = later phenology (sample earlier in atlas)
+          float adjustedTime = phenology.time - vPhenologyAdjustment;
+
+          // Wrap around year boundaries (0-365)
+          adjustedTime = mod(adjustedTime + 365.0, 365.0);
+
+          // Lookup phenology color from atlas texture using adjusted time
+          float u = clamp(adjustedTime / 365.0, 0.0, 1.0);
           float v = (vPhenologySpecies + 0.5) / phenology.atlasHeight;
           vec3 phenoColor = texture(phenologyAtlas, vec2(u, v)).rgb;
           color = vec4(phenoColor, color.a);
@@ -81,12 +99,18 @@ export class PhenologyExtension extends LayerExtension<PhenologyExtensionProps> 
   }
 
   initializeState() {
-    // Add the species index attribute
+    // Add the species index and adjustment days attributes
     (this as any).getAttributeManager()?.add({
       instancePhenologySpecies: {
         size: 1,
         accessor: 'getPhenologySpeciesIndex',
         type: 'float32'
+      },
+      instancePhenologyAdjustment: {
+        size: 1,
+        accessor: 'getPhenologyAdjustmentDays',
+        type: 'float32',
+        defaultValue: 0
       }
     });
   }
@@ -122,7 +146,8 @@ export class PhenologyExtension extends LayerExtension<PhenologyExtensionProps> 
       phenologyAtlas: (this as any).props.phenologyAtlas,
       phenologyTime: (this as any).props.phenologyTime,
       phenologyAtlasHeight: (this as any).props.phenologyAtlasHeight,
-      getPhenologySpeciesIndex: (this as any).props.getPhenologySpeciesIndex
+      getPhenologySpeciesIndex: (this as any).props.getPhenologySpeciesIndex,
+      getPhenologyAdjustmentDays: (this as any).props.getPhenologyAdjustmentDays
     };
   }
 }
