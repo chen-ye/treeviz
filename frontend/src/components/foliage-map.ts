@@ -3,8 +3,8 @@ import { customElement, property } from 'lit/decorators.js';
 import { MapboxOverlay } from '@deck.gl/mapbox';
 import maplibregl from 'maplibre-gl';
 import mapLibreCss from 'maplibre-gl/dist/maplibre-gl.css?inline';
-import { PhenologyLayer } from './phenology-layer';
 import { ScatterplotLayer } from '@deck.gl/layers';
+import { PhenologyExtension } from './phenology-layer-extension';
 import { Texture } from '@luma.gl/core';
 
 @customElement('foliage-map')
@@ -63,6 +63,10 @@ export class FoliageMap extends LitElement {
     const idx = this.atlasMapping[d.species];
     return idx !== undefined ? idx : this.atlasMapping['DEFAULT'] || 0;
   };
+
+  // For PhenologyExtension compatibility
+  // getPhenologySpeciesIndex is passed as a prop to ScatterplotLayer
+
 
   @property({ type: Number })
   dayOfYear = 280; // Default to mid-Oct
@@ -141,22 +145,22 @@ export class FoliageMap extends LitElement {
       // deck.gl can diff and recycle GPU state efficiently. This avoids in-place
       // mutation of layer props and follows the reactive pattern used by deck.gl.
 
-      // Create a new phenology layer instance (same id so deck.gl matches state)
-      this.phenologyLayer = new PhenologyLayer({
+      // Create a new phenology layer instance (now using ScatterplotLayer + PhenologyExtension)
+      this.phenologyLayer = new ScatterplotLayer({
         id: 'phenology-layer',
         data: './api/trees?limit=2000',
         getPosition: (d: any) => d.position,
-        getSpeciesIndex: this.speciesIndexAccessor,
-        uAtlas: this.atlasTexture,
-        uAtlasHeight: atlasHeight,
-        uTime: this.dayOfYear,
-
+        getPhenologySpeciesIndex: this.speciesIndexAccessor,
+        phenologyAtlas: this.atlasTexture,
+        phenologyAtlasHeight: atlasHeight,
+        phenologyTime: this.dayOfYear,
         getRadius: 8,
         radiusMinPixels: 2,
         pickable: true,
+        extensions: [new PhenologyExtension()],
         // Ensure attributes depending on atlasMapping are updated when mapping changes
         updateTriggers: {
-          getSpeciesIndex: [this.atlasMapping]
+          getPhenologySpeciesIndex: [this.atlasMapping]
         }
       });
 
