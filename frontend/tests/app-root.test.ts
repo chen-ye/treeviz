@@ -3,10 +3,17 @@ import { html, render } from 'lit';
 import '../src/components/app-root';
 import { AppRoot } from '../src/components/app-root';
 
+// Mock fetch
+global.fetch = vi.fn();
+
 describe('AppRoot', () => {
   let element: AppRoot;
 
   beforeEach(async () => {
+    (global.fetch as any).mockResolvedValue({
+        json: async () => ({ atlas_mapping: { 'TestTree': 0 } })
+    });
+
     element = document.createElement('app-root') as AppRoot;
     document.body.appendChild(element);
     await element.updateComplete;
@@ -14,6 +21,7 @@ describe('AppRoot', () => {
 
   afterEach(() => {
     document.body.removeChild(element);
+    vi.clearAllMocks();
   });
 
   it('renders correctly', () => {
