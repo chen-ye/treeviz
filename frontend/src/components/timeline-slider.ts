@@ -1,9 +1,11 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
+import { SignalWatcher } from '@lit-labs/signals';
 import '@shoelace-style/shoelace/dist/components/range/range.js';
+import { dayOfYearSignal, yearSignal } from '../store';
 
 @customElement('timeline-slider')
-export class TimelineSlider extends LitElement {
+export class TimelineSlider extends SignalWatcher(LitElement) {
   static styles = css`
     :host {
       display: block;
@@ -30,27 +32,15 @@ export class TimelineSlider extends LitElement {
     }
   `;
 
-  @property({ type: Number })
-  dayOfYear = 1;
-
-  @property({ type: Number })
-  year = 2024;
-
   private get formattedDate() {
-      const date = new Date(this.year, 0); // Jan 1st
-      date.setDate(this.dayOfYear);
+      const date = new Date(yearSignal.get(), 0); // Jan 1st
+      date.setDate(dayOfYearSignal.get());
       return date.toLocaleDateString(undefined, { month: 'long', day: 'numeric' });
   }
 
   handleInput(e: Event) {
       const target = e.target as HTMLInputElement;
-      this.dayOfYear = parseInt(target.value, 10);
-
-      this.dispatchEvent(new CustomEvent('date-change', {
-          detail: { dayOfYear: this.dayOfYear },
-          bubbles: true,
-          composed: true
-      }));
+      dayOfYearSignal.set(parseInt(target.value, 10));
   }
 
   render() {
@@ -59,7 +49,7 @@ export class TimelineSlider extends LitElement {
       <sl-range
         min="1"
         max="365"
-        .value=${this.dayOfYear}
+        .value=${dayOfYearSignal.get()}
         @sl-input=${this.handleInput}
       ></sl-range>
     `;

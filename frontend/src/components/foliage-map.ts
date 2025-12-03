@@ -1,14 +1,16 @@
 import { LitElement, html, css, unsafeCSS } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
+import { SignalWatcher } from '@lit-labs/signals';
 import { MapboxOverlay } from '@deck.gl/mapbox';
 import maplibregl from 'maplibre-gl';
 import mapLibreCss from 'maplibre-gl/dist/maplibre-gl.css?inline';
 import { ScatterplotLayer } from '@deck.gl/layers';
 import { PhenologyExtension } from './phenology-layer-extension';
 import { Texture } from '@luma.gl/core';
+import { dayOfYearSignal, showDebugSignal } from '../store';
 
 @customElement('foliage-map')
-export class FoliageMap extends LitElement {
+export class FoliageMap extends SignalWatcher(LitElement) {
   static styles = [
     unsafeCSS(mapLibreCss),
     css`
@@ -52,11 +54,6 @@ export class FoliageMap extends LitElement {
   private map: maplibregl.Map | null = null;
   private atlasTexture: Texture | null = null;
   private atlasMapping: Record<string, number> = {};
-  @property({ type: Boolean })
-  showDebug = false;
-
-  private phenologyLayer: any | null = null;
-  private debugLayer: any | null = null;
 
   // Keep accessor identity stable between renders to avoid unnecessary churn
   private speciesIndexAccessor = (d: any) => {
@@ -67,15 +64,36 @@ export class FoliageMap extends LitElement {
   // For PhenologyExtension compatibility
   // getPhenologySpeciesIndex is passed as a prop to ScatterplotLayer
 
+  private phenologyLayer: any | null = null;
+  private debugLayer: any | null = null;
 
-  @property({ type: Number })
-  dayOfYear = 280; // Default to mid-Oct
+  private pollInterval: number | null = null;
+
+  get dayOfYear() {
+    return dayOfYearSignal.get();
+  }
+
+  get showDebug() {
+    return showDebugSignal.get();
+  }
 
   async firstUpdated() {
     const container = this.shadowRoot?.getElementById('map-container');
     if (container) {
       await this.loadMetadata();
       this.initMap(container as HTMLDivElement);
+
+      // Poll for signal changes and update when needed
+      this.pollInterval = window.setInterval(() => {
+        this.updateLayers();
+      }, 100);
+    }
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.pollInterval !== null) {
+      clearInterval(this.pollInterval);
     }
   }
 
@@ -190,8 +208,6 @@ export class FoliageMap extends LitElement {
   }
 
   toggleDebug() {
-    this.showDebug = !this.showDebug;
-    // Recreate layers to follow deck.gl reactive pattern
-    this.updateLayers();
+    showDebugSignal.set(!showDebugSignal.get());
   }
 }

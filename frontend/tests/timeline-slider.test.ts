@@ -1,11 +1,16 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import '../src/components/timeline-slider';
 import { TimelineSlider } from '../src/components/timeline-slider';
+import { dayOfYearSignal, yearSignal } from '../src/store';
 
 describe('TimelineSlider', () => {
   let element: TimelineSlider;
 
   beforeEach(async () => {
+    // Reset signals to default state
+    dayOfYearSignal.set(280);
+    yearSignal.set(2024);
+
     element = document.createElement('timeline-slider') as TimelineSlider;
     document.body.appendChild(element);
     await element.updateComplete;
@@ -20,19 +25,16 @@ describe('TimelineSlider', () => {
     expect(display).toBeTruthy();
   });
 
-  it('updates date display when dayOfYear changes', async () => {
-    element.dayOfYear = 32; // Feb 1st
+  it('updates date display when dayOfYear signal changes', async () => {
+    dayOfYearSignal.set(32); // Feb 1st
     await element.updateComplete;
     const display = element.shadowRoot?.querySelector('.date-display');
     expect(display?.textContent).toContain('February');
   });
 
-  it('emits date-change event on input', async () => {
+  it('updates dayOfYear signal on input', async () => {
     const range = element.shadowRoot?.querySelector('sl-range') as any;
     expect(range).toBeTruthy();
-
-    const spy = vi.fn();
-    element.addEventListener('date-change', spy);
 
     // Simulate input event by calling handler directly since sl-range behavior
     // is hard to mock perfectly in happy-dom
@@ -42,7 +44,6 @@ describe('TimelineSlider', () => {
 
     (element as any).handleInput(mockEvent);
 
-    expect(spy).toHaveBeenCalled();
-    expect(spy.mock.calls[0][0].detail.dayOfYear).toBe(50);
+    expect(dayOfYearSignal.get()).toBe(50);
   });
 });

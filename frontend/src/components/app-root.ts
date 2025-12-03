@@ -1,12 +1,13 @@
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
+import { SignalWatcher } from '@lit-labs/signals';
 import '@shoelace-style/shoelace/dist/themes/light.css';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
 import '@shoelace-style/shoelace/dist/components/icon/icon.js';
-import { FoliageMap } from './foliage-map';
+import { dayOfYearSignal } from '../store';
 
 @customElement('app-root')
-export class AppRoot extends LitElement {
+export class AppRoot extends SignalWatcher(LitElement) {
   static styles = css`
     :host {
       display: block;
@@ -36,29 +37,18 @@ export class AppRoot extends LitElement {
     }
   `;
 
-  // State for bridging sibling components
-  // In a larger app, use a store or context.
-  // Here we assume app-root orchestrates.
-
-  handleDateChange(e: CustomEvent) {
-      const map = this.querySelector('foliage-map') as FoliageMap;
-      if (map) {
-          map.dayOfYear = e.detail.dayOfYear;
-      }
-  }
-
   render() {
+    // Access signal value to create dependency for reactivity
+    dayOfYearSignal.get();
+
     return html`
       <header>
         <h1>Seattle Foliage Map</h1>
       </header>
       <main>
-         <!-- Hardcoded orchestration for prototype -->
+         <!-- Components now use shared signals store -->
          <foliage-map id="map"></foliage-map>
-         <timeline-slider
-            dayOfYear="280"
-            @date-change=${this.handleDateChange}
-         ></timeline-slider>
+         <timeline-slider></timeline-slider>
       </main>
     `;
   }
