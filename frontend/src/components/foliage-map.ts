@@ -179,8 +179,8 @@ export class FoliageMap extends SignalWatcher(LitElement) {
         phenologyAtlas: this.atlasTexture,
         phenologyAtlasHeight: atlasHeight,
         phenologyTime: this.dayOfYear,
-        getRadius: 8,
-        radiusMinPixels: 2,
+        getRadius: 48,
+        radiusMinPixels: 8,
         pickable: true,
         extensions: [new PhenologyExtension()],
         // Ensure attributes depending on atlasMapping are updated when mapping changes
